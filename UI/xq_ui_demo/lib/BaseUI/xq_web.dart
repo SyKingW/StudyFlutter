@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/services.dart' show AssetBundle, BinaryMessages, rootBundle;
 
 /**
  * iOS 需要在 Info.plist 添加 
@@ -28,32 +30,7 @@ class _XQWebRoute extends State<XQWebRoute> {
 
   @override
   Widget build(BuildContext context) {
-    getApplicationDocumentsDirectory().then((value) {
-      print("getApplicationDocumentsDirectory $value");
-      Stream<FileSystemEntity> stream = value.list();
-      stream.toList().then((value) {
-        print("toList $value");
-        for (FileSystemEntity item in value) {
-          print(item.path);
-        }
-      });
-    });
-
-    getTemporaryDirectory().then((value) {
-      print("getApplicationDocumentsDirectory $value");
-      Stream<FileSystemEntity> stream = value.list();
-      stream.toList().then((value) {
-        print("toList $value");
-        for (FileSystemEntity item in value) {
-          print(item.path);
-        }
-      });
-    });
-
-    print("rootBundle: " + rootBundle.toString());
-
     
-
     return Scaffold(
         appBar: AppBar(
           title: Text("XQWebRoute"),
@@ -88,6 +65,35 @@ class _XQWebRoute extends State<XQWebRoute> {
   void dispose() {
     _webViewCtl = null;
     super.dispose();
+  }
+
+  Future xq_test() async {
+// getApplicationDocumentsDirectory().then((value) {
+    //   print("getApplicationDocumentsDirectory $value");
+    //   Stream<FileSystemEntity> stream = value.list();
+    //   stream.toList().then((value) {
+    //     print("toList $value");
+    //     for (FileSystemEntity item in value) {
+    //       print(item.path);
+    //     }
+    //   });
+    // });
+
+    // getTemporaryDirectory().then((value) {
+    //   print("getApplicationDocumentsDirectory $value");
+    //   Stream<FileSystemEntity> stream = value.list();
+    //   stream.toList().then((value) {
+    //     print("toList $value");
+    //     for (FileSystemEntity item in value) {
+    //       print(item.path);
+    //     }
+    //   });
+    // });
+
+    //将string转会为Uint8List对象，通过上面可知key为AssetManifest.json
+
+
+
   }
 }
 
