@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'xq_label.dart';
-import 'xq_listView.dart';
-import 'xq_button.dart';
-import 'xq_image.dart';
-import 'xq_switch.dart';
-import 'xq_tabBar.dart';
-import 'xq_bottomTabBar.dart';
-import 'xq_textField.dart';
-
+import 'BaseUI/xq_baseUI.dart';
 import 'Animation/xq_animation.dart';
+import 'Bluetooth/xq_bluetooth.dart';
+import 'LocalDataStorage/xq_localDataStorage.dart';
+import 'Network/xq_network.dart';
+import 'Other/xq_other.dart';
 
 void main() => runApp(MyApp());
 
@@ -18,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'XQ Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -42,15 +38,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var _words = <XQMainModel>[
-    XQMainModel(XQMainListItemType.label, "label"),
-    XQMainModel(XQMainListItemType.button, "button"),
-    XQMainModel(XQMainListItemType.image, "image"),
-    XQMainModel(XQMainListItemType.xq_switch, "switch"),
-    XQMainModel(XQMainListItemType.textField, "输入框"),
-    XQMainModel(XQMainListItemType.xq_tabBar, "头部tabBar"),
-    XQMainModel(XQMainListItemType.xq_bottomTabBar, "底部tabBar"),
-    XQMainModel(XQMainListItemType.list, "list"),
+    XQMainModel(XQMainListItemType.baseUI, "基础UI"),
     XQMainModel(XQMainListItemType.animation, "动画"),
+    XQMainModel(XQMainListItemType.network, "网络请求"),
+    XQMainModel(XQMainListItemType.localDataStorage, "本地数据"),
+    XQMainModel(XQMainListItemType.bluetooth, "蓝牙"),
+    XQMainModel(XQMainListItemType.other, "其他"),
   ];
 
   @override
@@ -94,90 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
             return RaisedButton(
               child: Text(model.title),
               onPressed: (() {
-                switch (model.type) {
-                  case XQMainListItemType.list:
-                    {
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (context) {
-                        return new XQListView();
-                      }));
-                    }
-                    break;
-
-                  case XQMainListItemType.label:
-                    {
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (context) {
-                        return new XQLabelRoute();
-                      }));
-                    }
-                    break;
-
-                  case XQMainListItemType.button:
-                    {
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (context) {
-                        return new XQButtonRoute();
-                      }));
-                    }
-                    break;
-
-                  case XQMainListItemType.image:
-                    {
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (context) {
-                        return new XQImageRoute();
-                      }));
-                    }
-                    break;
-
-                  case XQMainListItemType.xq_switch:
-                    {
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (context) {
-                        return new XQSwitchRoute();
-                      }));
-                    }
-                    break;
-
-                  case XQMainListItemType.xq_tabBar:
-                    {
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (context) {
-                        return new XQTabBar();
-                      }));
-                    }
-                    break;
-
-                  case XQMainListItemType.xq_bottomTabBar:
-                    {
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (context) {
-                        return new XQBottomTabBarRoute();
-                      }));
-                    }
-                    break;
-
-                  case XQMainListItemType.animation:
-                    {
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (context) {
-                        return new XQAnimationRoute();
-                      }));
-                    }
-                    break;
-
-                  case XQMainListItemType.textField:
-                    {
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (context) {
-                        return new XQTextFieldRoute();
-                      }));
-                    }
-                    break;
-
-                  default:
-                }
+                this.push(model);
               }),
             );
           },
@@ -189,19 +99,70 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+
+  void push(XQMainModel model) {
+    switch (model.type) {
+      case XQMainListItemType.baseUI:
+        {
+          Navigator.push(context, new MaterialPageRoute(builder: (context) {
+            return new XQBaseUIRoute();
+          }));
+        }
+        break;
+
+      case XQMainListItemType.animation:
+        {
+          Navigator.push(context, new MaterialPageRoute(builder: (context) {
+            return new XQAnimationRoute();
+          }));
+        }
+        break;
+
+      case XQMainListItemType.network:
+        {
+          Navigator.push(context, new MaterialPageRoute(builder: (context) {
+            return new XQNetworkRoute();
+          }));
+        }
+        break;
+
+      case XQMainListItemType.bluetooth:
+        {
+          Navigator.push(context, new MaterialPageRoute(builder: (context) {
+            return new XQBLuetoothRout();
+          }));
+        }
+        break;
+
+      case XQMainListItemType.other:
+        {
+          Navigator.push(context, new MaterialPageRoute(builder: (context) {
+            return new XQOtherRoute();
+          }));
+        }
+        break;
+
+      case XQMainListItemType.localDataStorage:
+        {
+          Navigator.push(context, new MaterialPageRoute(builder: (context) {
+            return new XQLocalDataStorageRoute();
+          }));
+        }
+        break;
+
+      default:
+    }
+  }
 }
 
 enum XQMainListItemType {
   unknow,
-  label,
-  button,
-  list,
-  image,
-  textField,
-  xq_switch,
-  xq_tabBar,
-  xq_bottomTabBar,
+  baseUI,
   animation,
+  network,
+  localDataStorage,
+  bluetooth,
+  other,
 }
 
 class XQMainModel {
