@@ -4,7 +4,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:flutter/services.dart' show AssetBundle, BinaryMessages, rootBundle;
+import 'package:flutter/services.dart'
+    show AssetBundle, BinaryMessages, rootBundle;
 
 /**
  * iOS 需要在 Info.plist 添加 
@@ -21,7 +22,9 @@ class XQWebRoute extends StatefulWidget {
 }
 
 class _XQWebRoute extends State<XQWebRoute> {
-  WebViewController _webViewCtl = null;
+  WebViewController _webViewCtl;
+
+  String _url = "http://apphelp.lmiot.com.cn:9011/AboutUs_zzyzn.html";
 
   @override
   void initState() {
@@ -30,13 +33,41 @@ class _XQWebRoute extends State<XQWebRoute> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
         appBar: AppBar(
           title: Text("XQWebRoute"),
+          actions: <Widget>[
+            IconButton(
+              icon: Text("保存文件"),
+              onPressed: () {
+                this.xq_test();
+              },
+            ),
+            IconButton(
+              icon: Text("读取文件内容"),
+              onPressed: () {
+                this.xq_getFile();
+              },
+            ),
+            IconButton(
+              icon: Text("刷新WebView"),
+              onPressed: () {
+                this.xq_getPath().then((value) {
+                  Uri uri = Uri.file(value);
+                  _url = uri.toString();
+                  // _url = "http://" + uri.path;
+                  // _url = "https://www.baidu.com";
+                  if (_webViewCtl != null) {
+                    print(_url);
+                    _webViewCtl.loadUrl(_url);
+                  }
+                });
+              },
+            )
+          ],
         ),
         body: WebView(
-          initialUrl: "http://apphelp.lmiot.com.cn:9011/AboutUs_zzyzn.html",
+          initialUrl: _url,
           onPageFinished: (value) {
             // 加载成功
             print("onPageFinished: $value");
@@ -44,6 +75,11 @@ class _XQWebRoute extends State<XQWebRoute> {
           onWebViewCreated: (value) {
             print("onWebViewCreated: $value");
             _webViewCtl = value;
+          },
+          navigationDelegate: (value) {
+            print("navigationDelegate: $value");
+            // 在这里可以进行拦截跳转
+            return NavigationDecision.navigate;
           },
           javascriptChannels: Set.of([
             JavascriptChannel(
@@ -67,33 +103,88 @@ class _XQWebRoute extends State<XQWebRoute> {
     super.dispose();
   }
 
-  Future xq_test() async {
-// getApplicationDocumentsDirectory().then((value) {
-    //   print("getApplicationDocumentsDirectory $value");
-    //   Stream<FileSystemEntity> stream = value.list();
-    //   stream.toList().then((value) {
-    //     print("toList $value");
-    //     for (FileSystemEntity item in value) {
-    //       print(item.path);
-    //     }
-    //   });
-    // });
+  Future<String> xq_getPath() async {
+//     getApplicationDocumentsDirectory().then((value) {
+// value.path + "/html/Index.html";
+//     });
+    Directory d = await getApplicationDocumentsDirectory();
+    return d.path + "/html/Index.html";
+  }
 
-    // getTemporaryDirectory().then((value) {
-    //   print("getApplicationDocumentsDirectory $value");
-    //   Stream<FileSystemEntity> stream = value.list();
-    //   stream.toList().then((value) {
-    //     print("toList $value");
-    //     for (FileSystemEntity item in value) {
-    //       print(item.path);
-    //     }
-    //   });
-    // });
+  void xq_test() {
+    getApplicationDocumentsDirectory().then((value) {
+      Directory d = Directory(value.path + "/html");
+      d.exists().then((value) {
+        if (value) {
+          this.xq_createFile(d.path);
+        } else {
+          d.create().then((value) {
+            this.xq_createFile(d.path);
+          }).catchError(() {
+            print("创建失败");
+          });
+        }
+      });
+    });
+  }
 
-    //将string转会为Uint8List对象，通过上面可知key为AssetManifest.json
+  void xq_createFile(path) {
+    File f = File(path + "/Index.html");
+    f.exists().then((value) {
+      if (!value) {
+        print("文件不存在");
+        f.create().then((value) {
+          print("创建文件成功");
+          this.xq_writeFile(f);
+        });
+      } else {
+        print("文件存在: " + f.path);
 
+        f.delete().then((value) {
+          print("删除成功");
+          this.xq_writeFile(f);
+        });
 
+        // this.xq_reload(f.uri.toString());
+      }
+    });
+  }
 
+  void xq_writeFile(File f) {
+    // File f = File(path);
+    rootBundle.loadString("assets/html/Index.html").then((value) {
+      if (value.length != 0) {
+        f.writeAsString(value).then((value) {
+          print("写入文件成功");
+          this.xq_reload(f.uri.toString());
+        }).catchError(() {
+          print("写入失败");
+        });
+      }
+    });
+  }
+
+  void xq_getFile() {
+    this.xq_getPath().then((value) {
+      File f = File(value);
+      f.readAsString().then((value) {
+        print(value);
+      });
+    });
+  }
+
+  void xq_reload(String path) {
+    // _url = "file://" + path;
+
+    // Uri u = Uri.file(path);
+    // _url = u.path;
+
+    _url = path;
+
+    print(_url);
+    if (_webViewCtl != null) {
+      _webViewCtl.loadUrl(_url);
+    }
   }
 }
 

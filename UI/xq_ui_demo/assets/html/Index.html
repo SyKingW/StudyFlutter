@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>首页</title>
+    </head>
+    <body>
+
+        <button type="button" onclick="xq_callApp">点我!点我!点我!点我!点我!点我!点我!点我!点我!点我!点我!点我!点我!点我!点我!</button>
+
+    </body>
+
+    <script>
+
+        function xq_callApp() {
+            var data = "data";
+            if (/android/i.test(navigator.userAgent)) {
+                try {
+                    window.android.xq_callApp(data)
+                } catch (e) {
+                    console.log(e)
+                    alert("发送失败")
+                }
+            } else if (/ios|iphone|ipod|pad/i.test(navigator.userAgent)) {
+                try {
+                    window.webkit.messageHandlers.xq_callApp.postMessage(data)
+                } catch (e) {
+                    console.log(e)
+                    alert("发送失败")
+                }
+            }
+        }
+
+        function xq_appCall(data) {
+            alert(data)
+        }
+
+    </script>
+</html>
