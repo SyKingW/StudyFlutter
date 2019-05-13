@@ -10,6 +10,7 @@ import 'xq_bottomTabBar.dart';
 import 'xq_textField.dart';
 import 'xq_web.dart';
 import 'xq_form.dart';
+import 'xq_alert.dart';
 
 // widget 相当于 vc
 class XQBaseUIRoute extends StatefulWidget {
@@ -172,7 +173,7 @@ class _XQBaseUIRoute extends State<XQBaseUIRoute> {
         case XQBaseUIListItemType.alert:
         {
           Navigator.push(context, new MaterialPageRoute(builder: (context) {
-            return XQWebRoute();
+            return XQAlertRoute();
           }));
         }
         break;

@@ -28,6 +28,11 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
 
+  # xq本地库导入
+  xq_dialog_plugin:
+    path: ../XQLocalLib/xq_dialog_plugin
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
