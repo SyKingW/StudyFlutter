@@ -39,6 +39,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   var _words = <XQMainModel>[
     XQMainModel(XQMainListItemType.baseUI, "基础UI"),
+    XQMainModel(XQMainListItemType.gesture, "手势"),
     XQMainModel(XQMainListItemType.animation, "动画"),
     XQMainModel(XQMainListItemType.network, "网络请求"),
     XQMainModel(XQMainListItemType.localDataStorage, "本地数据"),
@@ -150,6 +151,14 @@ class _MyHomePageState extends State<MyHomePage> {
         }
         break;
 
+      case XQMainListItemType.gesture:
+        {
+          Navigator.push(context, new MaterialPageRoute(builder: (context) {
+            return new XQLocalDataStorageRoute();
+          }));
+        }
+        break;
+
       default:
     }
   }
@@ -158,6 +167,7 @@ class _MyHomePageState extends State<MyHomePage> {
 enum XQMainListItemType {
   unknow,
   baseUI,
+  gesture,
   animation,
   network,
   localDataStorage,
