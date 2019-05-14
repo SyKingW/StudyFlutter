@@ -18,8 +18,17 @@ public class XqTestGetResourcePathPlugin implements MethodCallHandler {
   public void onMethodCall(MethodCall call, Result result) {
     if (call.method.equals("getPlatformVersion")) {
       result.success("Android " + android.os.Build.VERSION.RELEASE);
-    } else {
+    }else if (call.method.equals("getBatteryLevel")) {
+      Random random = new Random();
+      result.success(random.nextInt(100));
+    }else {
       result.notImplemented();
     }
   }
+
+  
+
+  
+
+
 }

@@ -48,7 +48,19 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: Column(
+            children: <Widget>[
+              Text('Running on: $_platformVersion\n'),
+              RaisedButton(
+                child: Text("获取电量"),
+                onPressed: () {
+                  XqTestGetResourcePath.getBatteryLevel().then((onValue) {
+                    print(onValue);
+                  });
+                },
+              )
+            ],
+          ),
         ),
       ),
     );
