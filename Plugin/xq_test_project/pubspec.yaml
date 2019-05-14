@@ -27,6 +27,8 @@ dependencies:
   xq_test_one:
     path: ../xq_test_one
 
+  xq_test_get_resource_path:
+    path: ../xq_test_get_resource_path
   
 
 dev_dependencies:

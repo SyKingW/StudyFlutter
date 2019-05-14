@@ -12,6 +12,9 @@
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
   if ([@"getPlatformVersion" isEqualToString:call.method]) {
     result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
+  }else if ([call.method isEqualToString:@"getBatteryLevel"]) {
+    int batteryLevel = arc4random() % 100;
+    result(@(batteryLevel));
   } else {
     result(FlutterMethodNotImplemented);
   }

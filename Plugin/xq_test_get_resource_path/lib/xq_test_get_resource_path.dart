@@ -10,4 +10,16 @@ class XqTestGetResourcePath {
     final String version = await _channel.invokeMethod('getPlatformVersion');
     return version;
   }
+
+  static Future<String> getBatteryLevel() async {
+    String batteryLevel;
+    try {
+      final int result = await _channel
+          .invokeMethod('getBatteryLevel', {'paramName': 'paramVale'});
+      batteryLevel = 'Battery level: $result%.';
+    } catch (e) {
+      batteryLevel = 'Failed to get battery level.';
+    }
+    return batteryLevel;
+  }
 }

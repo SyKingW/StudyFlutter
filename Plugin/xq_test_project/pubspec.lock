@@ -142,6 +142,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.8"
+  xq_test_get_resource_path:
+    dependency: "direct main"
+    description:
+      path: "../xq_test_get_resource_path"
+      relative: true
+    source: path
+    version: "0.0.1"
   xq_test_one:
     dependency: "direct main"
     description:
@@ -152,9 +159,9 @@ packages:
   xq_test_two:
     dependency: transitive
     description:
-      path: "/Users/wangxingqian/Desktop/Flutter/Flutter学习/Plugin/xq_test_two"
-      relative: false
+      path: "../xq_test_two"
+      relative: true
     source: path
-    version: "1.0.0+1"
+    version: "0.0.1"
 sdks:
   dart: ">=2.2.0 <3.0.0"
