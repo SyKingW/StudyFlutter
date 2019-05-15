@@ -10,6 +10,6 @@ target 'XQFlutterHybridDemo' do
 pod 'Flutter', :path => '../Flutter/Flutter'
 pod 'xq_test_two', :path => '../Flutter/Plugin/xq_test_two'
 
-pod 'XQProjectTool'
+pod 'XQProjectTool', :path => '/Users/wangxingqian/Desktop/XQWorkProject/Tool/XQProjectTool'
 
 end

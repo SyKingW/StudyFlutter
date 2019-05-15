@@ -7,9 +7,13 @@
 //
 
 #import "ViewController.h"
+#import <XQProjectTool/NSObject+XQViewOC.h>
+
 #import <Flutter/Flutter.h>
 
 #import "GeneratedPluginRegistrant.h"
+
+
 
 #define xq_UITableViewCell_Result @"cell"
 
@@ -39,6 +43,27 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+    
+    [FlutterEngine xq_viewInstanceMethod];
+    [FlutterEngine xq_viewClassMethod];
+    
+//    debugDescription = "<FlutterEngine: 0x280de4e00>";
+//    description = "<FlutterEngine: 0x280de4e00>";
+//    hash = 10751987200;
+//    lifecycleChannel = "<FlutterBasicMessageChannel: 0x2834c9240>";
+//    localizationChannel = "<FlutterMethodChannel: 0x2834c8440>";
+//    navigationChannel = "<FlutterMethodChannel: 0x2834c9180>";
+//    platformChannel = "<FlutterMethodChannel: 0x2834c9160>";
+//    pluginPublications =     {
+//        XqTestTwoPlugin = "<null>";
+//    };
+//    settingsChannel = "<FlutterBasicMessageChannel: 0x2834c9280>";
+//    superclass = NSObject;
+//    systemChannel = "<FlutterBasicMessageChannel: 0x2834c9260>";
+//    textInputChannel = "<FlutterMethodChannel: 0x2834c9220>";
+//    viewController = "<FlutterViewController: 0x106884200>";
+    
     // 释放内存
     if (self.engine) {
         [self.engine destroyContext];
