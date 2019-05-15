@@ -1,6 +1,11 @@
 [toc]
 
 
+介绍混编的-iOS篇
+https://www.jianshu.com/p/48a9083ebe89
+
+
+
 # 原项目的配置
 
 目前先搞定 iOS 的   
@@ -29,7 +34,7 @@ xq_test_two 是 plugin, 这里注册这个第三方, 然后第三方会去监听
 
 ## podspec
 
-```
+```ruby
 # Uncomment this line to define a global platform for your project
 # platform :ios, '9.0'
 
@@ -42,6 +47,14 @@ project 'Runner', {
   'Release' => :release,
 }
 
+
+# Podfile 是 Ruby 语言
+
+
+# 声明一个函数, 解析文件
+# 大致把数据: FLUTTER_ROOT=/Users/wangxingqian/flutter
+# 解析成: [{:name=>"FLUTTER_ROOT", :path=>"/Users/wangxingqian/flutter"}]
+# 就是获取到一个名称和路径的数组
 def parse_KV_file(file, separator='=')
   file_abs_path = File.expand_path(file)
   if !File.exists? file_abs_path
@@ -64,41 +77,63 @@ def parse_KV_file(file, separator='=')
   return pods_ary
 end
 
+
+
+
 target 'Runner' do
   # Prepare symlinks folder. We use symlinks to avoid having Podfile.lock
   # referring to absolute paths on developers' machines.
+  # 执行命令, 删除原本的link文件, 并创建文件夹
   system('rm -rf .symlinks')
   system('mkdir -p .symlinks/plugins')
 
+  
   # Flutter Pods
-  generated_xcode_build_settings = parse_KV_file('./Flutter/Generated.xcconfig')
+  # 获取配置数据
+  generated_xcode_build_settings = parse_KV_file('./Flutter/Generated.xcconfig')  
+  # 判断是否获取数据为空
   if generated_xcode_build_settings.empty?
     puts "Generated.xcconfig must exist. If you're running pod install manually, make sure flutter packages get is executed first."
   end
+
+  # 遍历获取到的数组数据
   generated_xcode_build_settings.map { |p|
+    # 判断名称是否为 FLUTTER_FRAMEWORK_DIR 
     if p[:name] == 'FLUTTER_FRAMEWORK_DIR'
+      # 获取 .symlinks/flutter
       symlink = File.join('.symlinks', 'flutter')
+      # 把flutter链接到该目录下
       File.symlink(File.dirname(p[:path]), symlink)
+      # pod Flutter, 路径指向链接目录
       pod 'Flutter', :path => File.join(symlink, File.basename(p[:path]))
     end
   }
 
   # Plugin Pods
+  # 获取plugins配置数据
   plugin_pods = parse_KV_file('../.flutter-plugins')
+  # 遍历数据
   plugin_pods.map { |p|
+    # 获取链接目录路径
     symlink = File.join('.symlinks', 'plugins', p[:name])
+    # 
     File.symlink(p[:path], symlink)
+    # pod plugin, 路径指向文件目录
     pod p[:name], :path => File.join(symlink, 'ios')
   }
+
 end
 
+# 遍历 target
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
+      # 配置 bitcode 为 NO
       config.build_settings['ENABLE_BITCODE'] = 'NO'
     end
   end
 end
+
 
 ```
 
@@ -249,9 +284,11 @@ bitcode -> NO
 
 
 
+# 一些混编东西
 
 
-# 两种 Hybrid 方式
+
+## 两种 Hybrid 方式
 
 
 目前主流的混合开发方案有两种集成方式：  
@@ -261,6 +298,33 @@ bitcode -> NO
 
 ![](images/2.png)
 
+
+
+## 和原生界面之间的跳转
+
+咸鱼团队的方案 hybrid_stack_manager  
+https://pub.flutter-io.cn/packages/hybrid_stack_manager
+
+https://github.com/FlutterRepo/hybrid_stack_manager
+
+
+
+
+
+
+## 脚本快速打包发布
+
+编译 aot
+
+```
+flutter build aot --release
+```
+
+初步想法  
+
+1. 编译aot
+2. 从aot文件夹内取出 iOS 的 .framework 和 Android 的 xxx 
+3. 上传到本地 gitlab
 
 
 # 坑
@@ -292,6 +356,15 @@ https://juejin.im/post/5c24ad306fb9a049d2361cff
 2. 自己持有 FlutterEngine, 在不需要的时候, 调用 destroyContext 方法, 释放内存.
 
 > 经测试, 就算调用了 destroyContext 也会一样会有一部分内存没释放, 不过相对来说, 已经好很多了. 
+
+
+
+
+
+
+
+
+
 
 
 

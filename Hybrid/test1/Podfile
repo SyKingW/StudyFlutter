@@ -1,5 +1,4 @@
-# Uncomment this line to define a global platform for your project
-# platform :ios, '9.0'
+
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -10,6 +9,8 @@ project 'Runner', {
   'Release' => :release,
 }
 
+
+# 声明一个函数, 解析文件
 def parse_KV_file(file, separator='=')
   file_abs_path = File.expand_path(file)
   if !File.exists? file_abs_path
@@ -32,16 +33,23 @@ def parse_KV_file(file, separator='=')
   return pods_ary
 end
 
+
+
+
 target 'Runner' do
   # Prepare symlinks folder. We use symlinks to avoid having Podfile.lock
   # referring to absolute paths on developers' machines.
+  # 执行命令, 删除原本的link文件, 并创建文件夹
   system('rm -rf .symlinks')
   system('mkdir -p .symlinks/plugins')
 
-use_frameworks!
-
+  
   # Flutter Pods
   generated_xcode_build_settings = parse_KV_file('./Flutter/Generated.xcconfig')
+
+  let Log = Logger()
+  log.debug('generated_xcode_build_settings: ' + generated_xcode_build_settings)
+
   if generated_xcode_build_settings.empty?
     puts "Generated.xcconfig must exist. If you're running pod install manually, make sure flutter packages get is executed first."
   end
@@ -60,11 +68,13 @@ use_frameworks!
     File.symlink(p[:path], symlink)
     pod p[:name], :path => File.join(symlink, 'ios')
   }
+
 end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
+      # 配置 bitcode 为 NO
       config.build_settings['ENABLE_BITCODE'] = 'NO'
     end
   end

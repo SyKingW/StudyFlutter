@@ -6,6 +6,10 @@ import 'Bluetooth/xq_bluetooth.dart';
 import 'LocalDataStorage/xq_localDataStorage.dart';
 import 'Network/xq_network.dart';
 import 'Other/xq_other.dart';
+import 'LifeCycle/xq_lifeCycle.dart';
+import 'Notification/xq_notification.dart';
+import 'DataTransport/xq_data_transport.dart';
+import 'Push/xq_push.dart';
 
 void main() => runApp(MyApp());
 
@@ -38,11 +42,15 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var _words = <XQMainModel>[
+    XQMainModel(XQMainListItemType.lifeCycle, "App和Route生命周期"),
     XQMainModel(XQMainListItemType.baseUI, "基础UI"),
     XQMainModel(XQMainListItemType.gesture, "手势"),
     XQMainModel(XQMainListItemType.animation, "动画"),
-    XQMainModel(XQMainListItemType.network, "网络请求"),
+    XQMainModel(XQMainListItemType.push, "页面的跳转"),
+    XQMainModel(XQMainListItemType.dataTransport, "数据传输"),
     XQMainModel(XQMainListItemType.localDataStorage, "本地数据"),
+    XQMainModel(XQMainListItemType.network, "网络请求"),
+    XQMainModel(XQMainListItemType.notification, "通知"),
     XQMainModel(XQMainListItemType.bluetooth, "蓝牙"),
     XQMainModel(XQMainListItemType.other, "其他"),
   ];
@@ -105,56 +113,85 @@ class _MyHomePageState extends State<MyHomePage> {
     switch (model.type) {
       case XQMainListItemType.baseUI:
         {
-          Navigator.push(context, new MaterialPageRoute(builder: (context) {
-            return new XQBaseUIRoute();
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return XQBaseUIRoute();
           }));
         }
         break;
 
       case XQMainListItemType.animation:
         {
-          Navigator.push(context, new MaterialPageRoute(builder: (context) {
-            return new XQAnimationRoute();
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return XQAnimationRoute();
           }));
         }
         break;
 
       case XQMainListItemType.network:
         {
-          Navigator.push(context, new MaterialPageRoute(builder: (context) {
-            return new XQNetworkRoute();
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return XQNetworkRoute();
           }));
         }
         break;
 
       case XQMainListItemType.bluetooth:
         {
-          Navigator.push(context, new MaterialPageRoute(builder: (context) {
-            return new XQBLuetoothRout();
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return XQBLuetoothRout();
           }));
         }
         break;
 
       case XQMainListItemType.other:
         {
-          Navigator.push(context, new MaterialPageRoute(builder: (context) {
-            return new XQOtherRoute();
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return XQOtherRoute();
           }));
         }
         break;
 
       case XQMainListItemType.localDataStorage:
         {
-          Navigator.push(context, new MaterialPageRoute(builder: (context) {
-            return new XQLocalDataStorageRoute();
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return XQLocalDataStorageRoute();
           }));
         }
         break;
 
       case XQMainListItemType.gesture:
         {
-          Navigator.push(context, new MaterialPageRoute(builder: (context) {
-            return new XQLocalDataStorageRoute();
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return XQLocalDataStorageRoute();
+          }));
+        }
+        break;
+
+        case XQMainListItemType.lifeCycle:
+        {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return Xq_lifeCycle();
+          }));
+        }
+        break;
+
+        case XQMainListItemType.notification: {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return Xq_notification();
+          }));
+        }
+        break;
+
+        case XQMainListItemType.dataTransport: {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return Xq_data_transport();
+          }));
+        }
+        break;
+
+        case XQMainListItemType.push: {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return Xq_push();
           }));
         }
         break;
@@ -169,9 +206,13 @@ enum XQMainListItemType {
   baseUI,
   gesture,
   animation,
+  dataTransport,
   network,
   localDataStorage,
+  push,
+  notification,
   bluetooth,
+  lifeCycle,
   other,
 }
 
